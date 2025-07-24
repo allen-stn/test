@@ -1,1 +1,35 @@
+# cosine_similarity_score.py
+
+import librosa
+import numpy as np
+from scipy.spatial.distance import cosine
+
+def load_audio(file_path, sr=16000):
+    audio, _ = librosa.load(file_path, sr=sr)
+    return audio
+
+def extract_features(audio, sr=16000, n_mfcc=13):
+    mfcc = librosa.feature.mfcc(y=audio, sr=sr, n_mfcc=n_mfcc)
+    mfcc_mean = np.mean(mfcc, axis=1)  # average over time
+    return mfcc_mean
+
+def cosine_similarity(vec1, vec2):
+    return 1 - cosine(vec1, vec2)
+
+# === Example usage ===
+file1 = r"path to audio1.wav"
+file2 = r"path to audio2.wav"
+
+# Load and process audio
+audio1 = load_audio(file1)
+audio2 = load_audio(file2)
+
+# Extract MFCC features
+features1 = extract_features(audio1)
+features2 = extract_features(audio2)
+
+# Compute cosine similarity
+similarity = cosine_similarity(features1, features2)
+
+print(f"Cosine similarity between audio files: {similarity:.4f}")
 
